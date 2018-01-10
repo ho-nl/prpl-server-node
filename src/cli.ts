@@ -156,10 +156,31 @@ export function run(argv: string[]) {
   app.use(compression());
 
   if (args['bot-proxy']) {
+    //Define custom user agents.
+    const botUserAgents = [
+        'W3C_Validator',
+        'baiduspider',
+        'bingbot',
+        'embedly',
+        'facebookexternalhit',
+        'linkedinbo',
+        'outbrain',
+        'pinterest',
+        'quora link preview',
+        'rogerbo',
+        'showyoubot',
+        'slackbot',
+        'twitterbot',
+        'vkShare',
+        'googlebot'
+    ]
+    const botList = new RegExp(botUserAgents.join('|'), 'i');
+
     console.info(`Proxying bots to "${args['bot-proxy']}".`);
     app.use(rendertron.makeMiddleware({
       proxyUrl: args['bot-proxy'],
       injectShadyDom: true,
+      userAgentPattern: botList
     }));
   }
 
